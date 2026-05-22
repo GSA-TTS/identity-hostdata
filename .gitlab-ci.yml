@@ -51,6 +51,20 @@ test_app:
     when: always
     reports:
       junit: rspec.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/coverage.xml
     expire_in: 31d
     paths:
+      - coverage/coverage.xml
       - rspec.xml
+
+lint:
+  stage: test
+  needs:
+    - job: install_dependencies
+  cache:
+    - <<: *ruby_cache
+  script:
+    - *bundle_install
+    - make lint
